@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SF 311 F1 Showrun Analysis · Ann Mary Kurian</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:      #F5F0E8;
+    --cream-dark: #EDE6D6;
+    --navy:       #1C2B4A;
+    --navy-mid:   #2D4470;
+    --teal:       #1A7A6E;
+    --teal-light: #E8F5F3;
+    --amber:      #C4873A;
+    --amber-light:#FDF3E7;
+    --red:        #C0392B;
+    --red-light:  #FEF2F2;
+    --green:      #1A7A3C;
+    --green-light:#F0FDF4;
+    --text:       #1C2B4A;
+    --muted:      #7A8499;
+    --border:     #DDD6C8;
+    --serif:      'Playfair Display', Georgia, serif;
+    --sans:       'DM Sans', sans-serif;
+    --mono:       'DM Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: 0.4;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(245,240,232,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-back:hover { color: var(--navy); }
+  .nav-name { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--navy); text-decoration: none; }
+
+  .hero { padding: 140px 60px 80px; max-width: 860px; margin: 0 auto; }
+  .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s ease forwards 0.2s; }
+  .hero-title { font-family: var(--serif); font-size: clamp(36px, 5vw, 60px); font-weight: 700; line-height: 1.1; color: var(--navy); margin-bottom: 12px; opacity: 0; animation: fadeUp 0.7s ease forwards 0.35s; }
+  .hero-title em { font-style: italic; color: var(--amber); }
+  .hero-subtitle { font-family: var(--serif); font-size: 20px; font-style: italic; color: var(--muted); margin-bottom: 40px; opacity: 0; animation: fadeUp 0.7s ease forwards 0.45s; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 32px; margin-bottom: 40px; opacity: 0; animation: fadeUp 0.7s ease forwards 0.55s; }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .meta-value { font-size: 14px; font-weight: 500; color: var(--navy); }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; opacity: 0; animation: fadeUp 0.7s ease forwards 0.65s; }
+  .tag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 5px 12px; border: 1px solid var(--border); color: var(--muted); border-radius: 2px; background: white; }
+
+  .divider { height: 1px; background: var(--border); margin: 0 60px; }
+
+  .content { max-width: 860px; margin: 0 auto; padding: 0 60px; }
+  .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+  .section-title { font-family: var(--serif); font-size: clamp(26px, 3vw, 36px); font-weight: 700; color: var(--navy); line-height: 1.15; margin-bottom: 24px; }
+  .section-title em { font-style: italic; color: var(--amber); }
+  .body-text { font-size: 16px; line-height: 1.85; color: var(--text); margin-bottom: 20px; }
+  .body-text:last-child { margin-bottom: 0; }
+
+  /* QUESTION BLOCK */
+  .question-block {
+    background: var(--navy);
+    padding: 40px 48px;
+    margin: 32px 0;
+  }
+  .question-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-bottom: 12px; }
+  .question-text { font-family: var(--serif); font-size: clamp(20px, 2.5vw, 26px); font-style: italic; color: var(--cream); line-height: 1.5; }
+
+  /* DATA CONTEXT */
+  .data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 32px; }
+  .data-card { background: white; border: 1px solid var(--border); padding: 24px; }
+  .data-card-number { font-family: var(--serif); font-size: 32px; font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 6px; }
+  .data-card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .data-card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* METHOD */
+  .method-steps { display: flex; flex-direction: column; gap: 2px; margin-top: 32px; }
+  .method-step { background: white; border: 1px solid var(--border); border-left: 4px solid var(--teal); padding: 24px 28px; display: flex; gap: 20px; align-items: flex-start; }
+  .method-step-num { font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--teal); opacity: 0.4; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+  .method-step-title { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .method-step-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .method-step-code { font-family: var(--mono); font-size: 12px; background: var(--cream-dark); border: 1px solid var(--border); padding: 8px 12px; margin-top: 10px; color: var(--navy); display: inline-block; }
+
+  /* FINDINGS */
+  .findings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 32px; }
+  .finding-card { background: white; border: 1px solid var(--border); border-top: 3px solid var(--amber); padding: 28px; }
+  .finding-number { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--amber); margin-bottom: 10px; }
+  .finding-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 12px; line-height: 1.3; }
+  .finding-stat { font-family: var(--serif); font-size: 36px; font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 8px; }
+  .finding-stat span { font-size: 18px; color: var(--amber); }
+  .finding-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .finding-card.wide { grid-column: 1 / -1; border-top-color: var(--teal); }
+  .finding-card.wide .finding-number { color: var(--teal); }
+  .finding-card.wide .finding-stat { color: var(--teal); }
+
+  /* REGRESSION TABLE */
+  .reg-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 14px; }
+  .reg-table th { background: var(--navy); color: var(--cream); padding: 12px 16px; text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+  .reg-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); background: white; color: var(--text); }
+  .reg-table tr:last-child td { border-bottom: none; }
+  .reg-table .highlight td { background: var(--amber-light); font-weight: 500; }
+  .sig { font-family: var(--mono); font-size: 11px; color: var(--teal); font-weight: 500; }
+  .insig { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  /* COMPLAINTS TABLE */
+  .complaints-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 14px; }
+  .complaints-table th { background: var(--navy); color: var(--cream); padding: 12px 16px; text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+  .complaints-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); background: white; }
+  .complaints-table tr:first-child td { background: var(--amber-light); font-weight: 500; }
+  .complaints-table .bar-cell { width: 200px; }
+  .bar { height: 8px; background: var(--amber); border-radius: 2px; }
+
+  /* RECOMMENDATIONS */
+  .rec-list { display: flex; flex-direction: column; gap: 2px; margin-top: 32px; }
+  .rec-item { background: white; border: 1px solid var(--border); padding: 24px 28px; display: flex; gap: 20px; align-items: flex-start; }
+  .rec-icon { font-size: 22px; flex-shrink: 0; }
+  .rec-title { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .rec-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* REFLECTION */
+  .reflection-block { background: var(--navy); padding: 48px; margin-top: 32px; }
+  .reflection-quote { font-family: var(--serif); font-size: clamp(18px, 2.5vw, 24px); font-style: italic; color: var(--cream); line-height: 1.6; margin-bottom: 20px; }
+  .reflection-attr { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+
+  /* CTA */
+  .cta-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 48px; padding-bottom: 80px; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--navy); color: var(--cream); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; padding: 14px 28px; border-radius: 2px; transition: background 0.2s, transform 0.2s; }
+  .btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--navy); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; padding: 14px 28px; border-radius: 2px; border: 1.5px solid var(--border); transition: border-color 0.2s, transform 0.2s; }
+  .btn-secondary:hover { border-color: var(--navy); transform: translateY(-1px); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .content { padding: 0 24px; }
+    .data-grid { grid-template-columns: 1fr; }
+    .findings-grid { grid-template-columns: 1fr; }
+    .finding-card.wide { grid-column: 1; }
+    .reflection-block { padding: 32px 24px; }
+    .divider { margin: 0 24px; }
+    .question-block { padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://ann-kurian.github.io" class="nav-back">← Back to Portfolio</a>
+  <a href="https://ann-kurian.github.io" class="nav-name">Ann Mary Kurian</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Case Study · Operational Analysis · Applied Statistics</div>
+  <h1 class="hero-title">SF 311 &amp; the<br><em>F1 Showrun</em></h1>
+  <p class="hero-subtitle">Measuring the causal impact of a major urban event on city service complaints using Difference-in-Differences regression</p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-label">Dataset</span>
+      <span class="meta-value">SF 311 Cases — DataSF Open Data</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Method</span>
+      <span class="meta-value">Difference-in-Differences (DiD)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Context</span>
+      <span class="meta-value">USF MSMI — Applied Statistics</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Event</span>
+      <span class="meta-value">F1 Showrun, San Francisco · Feb 2026</span>
+    </div>
+  </div>
+  <div class="hero-tags">
+    <span class="tag">R</span>
+    <span class="tag">tidyverse</span>
+    <span class="tag">lubridate</span>
+    <span class="tag">ggplot2</span>
+    <span class="tag">Difference-in-Differences</span>
+    <span class="tag">Causal Inference</span>
+    <span class="tag">SF Open Data</span>
+    <span class="tag">Regression Analysis</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="content">
+
+  <!-- RESEARCH QUESTION -->
+  <div class="section reveal">
+    <div class="section-label">The Question</div>
+    <h2 class="section-title">Did the F1 Showrun <em>actually</em> cause more complaints?</h2>
+    <p class="body-text">
+      In February 2026, Formula 1 brought its Showrun event to San Francisco — a high-speed demonstration run through the streets of the Marina neighborhood. For residents, it meant road closures, crowds, and disruption. But how much disruption, exactly? And was any spike in complaints genuinely caused by the event, or just normal variation?
+    </p>
+    <p class="body-text">
+      This project uses San Francisco's publicly available 311 service request data to answer that question rigorously — isolating the causal effect of the event from background noise using a Difference-in-Differences regression model.
+    </p>
+    <div class="question-block">
+      <div class="question-label">Research Question</div>
+      <div class="question-text">"Did the F1 Showrun cause a statistically significant increase in 311 complaints in the Marina neighborhood, controlling for citywide trends?"</div>
+    </div>
+  </div>
+
+  <!-- DATA -->
+  <div class="section reveal">
+    <div class="section-label">The Data</div>
+    <h2 class="section-title">SF 311 Cases — <em>real open data</em></h2>
+    <p class="body-text">
+      The analysis uses San Francisco's live 311 service request dataset, published and maintained by the City on DataSF. Each row represents a single complaint — with a timestamp, neighborhood, complaint type, and status. The dataset is filtered to Supervisor District 2 (which includes the Marina) for the period January 1 to March 1, 2026.
+    </p>
+    <div class="data-grid">
+      <div class="data-card">
+        <div class="data-card-number">311</div>
+        <div class="data-card-label">Data Source</div>
+        <div class="data-card-desc">SF 311 Cases — DataSF open government data portal. Publicly available and updated in near real-time.</div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-number">60</div>
+        <div class="data-card-label">Days Analysed</div>
+        <div class="data-card-desc">Jan 1 – Mar 1, 2026. Provides sufficient pre-event baseline while keeping the window relevant to the event.</div>
+      </div>
+      <div class="data-card">
+        <div class="data-card-number">3</div>
+        <div class="data-card-label">Event Window Days</div>
+        <div class="data-card-desc">Feb 20–22, 2026. Extended one day beyond the event to capture any post-event disruption from the Showrun.</div>
+      </div>
+    </div>
+    <p class="body-text" style="margin-top:24px;">
+      The control group is constructed as the <strong>average daily complaints across all other San Francisco neighborhoods</strong> — not just one comparison area. This approach captures the citywide baseline more robustly than a single-neighborhood comparison.
+    </p>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="section reveal">
+    <div class="section-label">Methodology</div>
+    <h2 class="section-title">Why <em>Difference-in-Differences</em>?</h2>
+    <p class="body-text">
+      A simple before/after comparison of Marina complaints would tell us that complaints went up during the event — but it wouldn't tell us whether that increase was caused by the event, or whether it would have happened anyway as part of a citywide trend. Difference-in-Differences (DiD) solves this problem by comparing the change in Marina against the change in the rest of the city simultaneously.
+    </p>
+    <p class="body-text">
+      The key assumption is the <strong>parallel trends assumption</strong> — that in the absence of the event, Marina and other neighborhoods would have followed similar complaint trajectories. The time series visualization confirms this holds in the pre-event period.
+    </p>
+    <div class="method-steps">
+      <div class="method-step">
+        <div class="method-step-num">01</div>
+        <div>
+          <div class="method-step-title">Data Loading & Cleaning</div>
+          <div class="method-step-desc">Loaded the 311 CSV, parsed timestamps using lubridate, cleaned neighborhood names with janitor, and filtered to the January–March 2026 window.</div>
+          <div class="method-step-code">data <- read.csv("311_Cases.csv") |> clean_names()</div>
+        </div>
+      </div>
+      <div class="method-step">
+        <div class="method-step-num">02</div>
+        <div>
+          <div class="method-step-title">Treatment & Control Group Construction</div>
+          <div class="method-step-desc">Treatment group: Marina neighborhood daily complaint counts. Control group: average daily complaints across all other SF neighborhoods — computed per day to create a city-representative baseline.</div>
+          <div class="method-step-code">control_data <- daily_complaints |> filter(neighborhood != "Marina") |> group_by(date) |> summarise(complaints_count = mean(complaints_count))</div>
+        </div>
+      </div>
+      <div class="method-step">
+        <div class="method-step-num">03</div>
+        <div>
+          <div class="method-step-title">Period Definition</div>
+          <div class="method-step-desc">Three periods defined: pre-event (before Feb 20), event period (Feb 20–22), and post-event (after Feb 22). Binary indicator flags created for DiD regression.</div>
+          <div class="method-step-code">period = case_when(date < event_start ~ "pre_event", date <= event_end ~ "event_period", TRUE ~ "post_event")</div>
+        </div>
+      </div>
+      <div class="method-step">
+        <div class="method-step-num">04</div>
+        <div>
+          <div class="method-step-title">Difference-in-Differences Regression</div>
+          <div class="method-step-desc">OLS regression with an interaction term between the marina flag and event flag. The coefficient on the interaction term gives the DiD estimate — the causal effect of the event on Marina complaints, net of citywide trends.</div>
+          <div class="method-step-code">lm(complaints_count ~ marina_flag * event_flag, data = analysis_data)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDINGS -->
+  <div class="section reveal">
+    <div class="section-label">Key Findings</div>
+    <h2 class="section-title">What the <em>data shows</em></h2>
+    <div class="findings-grid">
+      <div class="finding-card wide">
+        <div class="finding-number">FINDING 01 — PRIMARY RESULT</div>
+        <div class="finding-title">The F1 Showrun caused a statistically significant surge in Marina complaints</div>
+        <div class="finding-stat">+12.31 <span>complaints/day</span></div>
+        <div class="finding-desc">The DiD coefficient on the interaction term (marina_flag × event_flag) is +12.31 and statistically significant. This is the isolated causal effect of the event on the Marina — net of any citywide trends. The rest of San Francisco remained stable throughout the event period.</div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">FINDING 02 — BASELINE</div>
+        <div class="finding-title">Marina has a structurally higher complaint baseline</div>
+        <div class="finding-stat">Higher <span>baseline</span></div>
+        <div class="finding-desc">Even before the event, Marina complaint volumes ran higher than the city average. This is captured by the marina_flag coefficient and confirms the parallel trends assumption holds — the gap is stable pre-event, then widens sharply during the Showrun.</div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">FINDING 03 — ISOLATION</div>
+        <div class="finding-title">The spike is neighbourhood-specific, not citywide</div>
+        <div class="finding-stat">Isolated <span>effect</span></div>
+        <div class="finding-desc">Other SF neighborhoods showed no meaningful change in complaint volume during the event window. This rules out external confounders — weather, city-wide policy changes, or reporting behaviour shifts — as alternative explanations for the Marina spike.</div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">FINDING 04 — COMPLAINT TYPE</div>
+        <div class="finding-title">Blocked driveways dominated event-period complaints</div>
+        <div class="finding-stat">#1 <span>complaint</span></div>
+        <div class="finding-desc">Blocked driveways were the most common complaint type in Marina during the event window. Of these, 24 requested a citation and 22 requested citation plus towing — indicating complete driveway obstruction in a significant share of cases.</div>
+      </div>
+    </div>
+
+    <!-- REGRESSION TABLE -->
+    <h3 style="font-family:var(--serif);font-size:20px;font-weight:600;color:var(--navy);margin-top:48px;margin-bottom:8px;">DiD Regression Output</h3>
+    <p class="body-text" style="font-size:14px;">OLS regression: complaints_count ~ marina_flag * event_flag</p>
+    <table class="reg-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Estimate</th>
+          <th>Interpretation</th>
+          <th>Significance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>(Intercept)</td>
+          <td>Baseline avg complaints</td>
+          <td>Average daily complaints for other neighborhoods in pre-event period</td>
+          <td class="sig">***</td>
+        </tr>
+        <tr>
+          <td>marina_flag</td>
+          <td>Marina baseline lift</td>
+          <td>How much higher Marina's complaints are vs. other neighborhoods pre-event</td>
+          <td class="sig">***</td>
+        </tr>
+        <tr>
+          <td>event_flag</td>
+          <td>~0</td>
+          <td>Change in other neighborhoods during event period — near zero, confirming no citywide effect</td>
+          <td class="insig">n.s.</td>
+        </tr>
+        <tr class="highlight">
+          <td>marina_flag × event_flag</td>
+          <td>+12.31</td>
+          <td>The DiD estimate — causal effect of the F1 Showrun on Marina complaints, net of citywide trends</td>
+          <td class="sig">***</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- TOP COMPLAINTS -->
+    <h3 style="font-family:var(--serif);font-size:20px;font-weight:600;color:var(--navy);margin-top:48px;margin-bottom:8px;">Top Complaint Types — Marina During F1 Showrun</h3>
+    <p class="body-text" style="font-size:14px;">Complaints filed in the Marina neighborhood during Feb 20–22, 2026</p>
+    <table class="complaints-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Complaint Type</th>
+          <th>Count</th>
+          <th class="bar-cell">Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Blocked Driveway — Citation Requested</td>
+          <td>24</td>
+          <td class="bar-cell"><div class="bar" style="width:100%"></div></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Blocked Driveway — Citation & Tow Requested</td>
+          <td>22</td>
+          <td class="bar-cell"><div class="bar" style="width:92%"></div></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Noise Report</td>
+          <td>~14</td>
+          <td class="bar-cell"><div class="bar" style="width:58%"></div></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Street & Sidewalk Cleaning</td>
+          <td>~11</td>
+          <td class="bar-cell"><div class="bar" style="width:46%"></div></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Parking Enforcement</td>
+          <td>~9</td>
+          <td class="bar-cell"><div class="bar" style="width:38%"></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono);">Note: ranks 3–5 are approximate from script output. Run the R script for exact counts.</p>
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="section reveal">
+    <div class="section-label">Operational Implications</div>
+    <h2 class="section-title">What this means for <em>city planning</em></h2>
+    <p class="body-text">
+      The findings are directly actionable for city operations teams responsible for managing large-scale events. A quantified, statistically validated surge figure — +12.31 complaints per day — can inform resource pre-deployment decisions before future events of similar scale.
+    </p>
+    <div class="rec-list">
+      <div class="rec-item">
+        <div class="rec-icon">🚗</div>
+        <div>
+          <div class="rec-title">Pre-deploy parking enforcement in the Marina for similar events</div>
+          <div class="rec-desc">Blocked driveways accounted for the two largest complaint categories. Proactive parking enforcement — rather than reactive citation requests — would reduce complaint volume and improve resident experience during future events.</div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-icon">📊</div>
+        <div>
+          <div class="rec-title">Use the +12 complaint/day figure as a planning baseline</div>
+          <div class="rec-desc">Future event impact assessments for the Marina can use 12 additional complaints per day as a statistically validated benchmark. This enables more accurate staffing and service capacity planning before events are approved.</div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-icon">🏙️</div>
+        <div>
+          <div class="rec-title">Expand the DiD framework to other event types and neighborhoods</div>
+          <div class="rec-desc">The methodology is replicable across any neighborhood-event combination in the 311 dataset. Applying it to other large SF events — Outside Lands, Fleet Week, Bay to Breakers — would build a comprehensive operational impact library for city planners.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="section reveal">
+    <div class="section-label">Reflection</div>
+    <h2 class="section-title">What this project <em>demonstrates</em></h2>
+    <p class="body-text">
+      The most interesting methodological choice here was using Difference-in-Differences rather than a simple before/after comparison. A naive analysis would show that Marina complaints went up during the event — but without the control group, that finding could just as easily reflect a citywide trend, a data anomaly, or seasonal variation. DiD rules those out.
+    </p>
+    <p class="body-text">
+      The parallel trends assumption — that Marina and other neighborhoods would have moved similarly in the absence of the event — is visually confirmed in the pre-event time series. That validation step is what makes the causal claim credible rather than just correlational.
+    </p>
+    <div class="reflection-block">
+      <div class="reflection-quote">"The question was never whether complaints went up. Of course they did — it was a Formula 1 event on a residential street. The question was whether we could prove it statistically and quantify it precisely enough to be useful for planning. That's what DiD gives you."</div>
+      <div class="reflection-attr">Ann Mary Kurian · Applied Statistics, USF MSMI</div>
+    </div>
+  </div>
+
+  <div class="cta-row reveal">
+    <a href="https://github.com/ann-kurian/sf-311-f1-analysis" target="_blank" class="btn-primary">View on GitHub →</a>
+    <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6" target="_blank" class="btn-secondary">View Dataset (DataSF)</a>
+    <a href="https://ann-kurian.github.io" class="btn-secondary">← Back to Portfolio</a>
+  </div>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
