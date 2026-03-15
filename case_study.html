@@ -142,13 +142,13 @@
 </nav>
 
 <div class="hero">
-  <div class="hero-eyebrow">Case Study · Operational Analysis · Applied Statistics · Causal Inference</div>
+  <div class="hero-eyebrow">Personal Project · Operational Analysis · Causal Inference</div>
   <h1 class="hero-title">SF 311 &amp; the<br><em>F1 Showrun</em></h1>
   <p class="hero-subtitle">Did a Formula 1 street event cause a measurable surge in San Francisco service complaints? A Difference-in-Differences regression analysis using real open government data.</p>
   <div class="hero-meta">
     <div class="meta-item"><span class="meta-label">Dataset</span><span class="meta-value">SF 311 Cases — DataSF</span></div>
     <div class="meta-item"><span class="meta-label">Method</span><span class="meta-value">Difference-in-Differences (DiD)</span></div>
-    <div class="meta-item"><span class="meta-label">Context</span><span class="meta-value">USF MSMI — Applied Statistics</span></div>
+    <div class="meta-item"><span class="meta-label">Context</span><span class="meta-value">Personal Project — inspired by classroom learning</span></div>
     <div class="meta-item"><span class="meta-label">Event</span><span class="meta-value">F1 Showrun · Marina District · Feb 2026</span></div>
   </div>
   <div class="hero-tags">
@@ -165,7 +165,8 @@
   <div class="section reveal">
     <div class="section-label">Research Design</div>
     <h2 class="section-title">Hypothesis &amp; <em>analytical approach</em></h2>
-    <p class="body-text">In February 2026, Formula 1 brought its Showrun to the Marina neighborhood — a high-speed street demonstration through a dense residential area. The city's 311 system captures every public service complaint in real time, making it a precise operational signal for how events affect neighborhoods. The question is not whether complaints went up — they almost certainly did. The question is whether the increase can be <em>causally attributed</em> to the event, rather than reflecting broader citywide trends or statistical noise.</p>
+    <p class="body-text">In February 2026, Formula 1 brought its Showrun to the streets of San Francisco's Marina neighborhood — a high-speed demonstration event through a dense residential corridor. Having recently studied Difference-in-Differences regression as part of my graduate coursework at USF, I was drawn to the question of whether the method could be applied to something observable and local: did the event cause a measurable increase in 311 service complaints, or was any apparent spike simply noise? The city's publicly available 311 dataset offered a precise, real-time operational signal to test this.</p>
+    <p class="body-text">The central question is not whether complaints went up — they almost certainly did. The question is whether the increase can be <em>causally attributed</em> to the event, rather than reflecting broader citywide trends or statistical variation. That distinction — between correlation and causation — is what makes the analysis meaningful and what transforms an observation into something operationally useful.</p>
     <div class="hypothesis-box">
       <div class="hypothesis-label">Null Hypothesis (H₀)</div>
       <div class="hypothesis-text">"The F1 Showrun had no statistically significant effect on 311 complaint volume in the Marina neighborhood, after controlling for citywide complaint trends."</div>
@@ -212,7 +213,6 @@
         <div>
           <div class="method-step-title">Data Loading & Cleaning</div>
           <div class="method-step-desc">Loaded the 311 CSV, parsed date-time strings with lubridate, standardised neighborhood names with janitor's clean_names(), and filtered to the Jan–Mar 2026 window.</div>
-          <code class="code-snippet">data <- read.csv("311_Cases.csv") |> clean_names()<br>data$date <- as.Date(mdy_hms(data$opened))</code>
         </div>
       </div>
       <div class="method-step">
@@ -476,13 +476,12 @@
     <p class="body-text">The parallel trends validation step is not a formality — it is what makes the causal claim defensible. Without it, the +12.31 figure would be a correlation. With it, it is an estimate that a policy analyst or operations planner can take seriously and act on.</p>
     <div class="reflection-block">
       <div class="reflection-quote">"The question is never whether complaints went up — of course they did. The question is whether you can prove it was the event and not something else, and quantify it precisely enough to be useful. That is what the method gives you."</div>
-      <div class="reflection-attr">Ann Mary Kurian · Applied Statistics, USF MSMI</div>
+      <div class="reflection-attr">Ann Mary Kurian · Personal Project · San Francisco, 2026</div>
     </div>
   </div>
 
   <div class="cta-row reveal">
-    <a href="https://github.com/ann-kurian/sf-311-f1-analysis" target="_blank" class="btn-primary">View on GitHub →</a>
-    <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6" target="_blank" class="btn-secondary">View Dataset (DataSF)</a>
+    <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6" target="_blank" class="btn-primary">View Dataset (DataSF) →</a>
     <a href="https://ann-kurian.github.io" class="btn-secondary">← Back to Portfolio</a>
   </div>
 
